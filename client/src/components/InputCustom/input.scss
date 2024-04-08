@@ -1,0 +1,29 @@
+.ant-input,
+.ant-input-password {
+  border-color: #b9b3b3 !important;
+  background-color: transparent !important;
+  color: white !important;
+  padding: 8px 12px;
+}
+
+.ant-input:hover,
+.ant-input:active,
+.ant-input:focus {
+  border-color: white !important;
+  caret-color: white !important;
+  background-color: transparent !important;
+}
+
+.ant-input::placeholder {
+  color: #6a6a6a;
+  font-style: italic;
+}
+
+.ant-input-affix-wrapper .anticon.ant-input-password-icon {
+  color: #6a6a6a;
+  font-size: 20px;
+
+  &:hover {
+    color: white;
+  }
+}

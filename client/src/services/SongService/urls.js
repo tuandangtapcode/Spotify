@@ -1,0 +1,6 @@
+export const apiCreateSong = "song/createSong"
+export const apiGetDetailSong = "song/getDetailSong"
+export const apiGetAllSongByAlbum = "song/getAllSongByAlbum"
+export const apiGetAllSongByArtist = "song/getAllSongByArtist"
+export const apiDeleteSong = "song/deleteSong"
+export const apiUpdateSong = "song/updateSong"

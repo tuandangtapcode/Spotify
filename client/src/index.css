@@ -1,5 +1,10 @@
-body {
+* {
   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -7,7 +12,73 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.ant-form-item {
+  margin-bottom: 0;
+}
+
+.ant-upload,
+.ant-upload-select {
+  width: 100%;
+}
+
+.ant-dropdown-menu {
+  padding: 8px !important;
+  background-color: rgb(56, 55, 55) !important;
+  color: white !important;
+}
+
+.ant-dropdown-menu-item {
+  padding: 8px !important;
+}
+
+.ant-dropdown-menu-item:hover {
+  background-color: #6a6a6a !important;
+}
+
+.ant-dropdown-menu-title-content {
+  color: white;
+}
+
+.noBackground {
+  background-color: transparent;
+}
+
+.backgroundBlack {
+  background-color: rgb(12, 12, 12);
+}
+
+.backgroundGray {
+  background-color: rgb(16, 16, 16);
+}
+
+.text {
+  color: white;
+}
+
+.text-gray {
+  color: #6a6a6a;
+}
+
+.text-gray-than {
+  color: #b9b3b3;
+}
+
+.text-green {
+  color: rgb(29, 185, 84);
+}
+
+.text-red {
+  color: red;
+}
+
+@keyframes iconFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
