@@ -6,7 +6,7 @@ const globalSlice = createSlice({
     user: {},
     currentSong: {},
     isPlay: false,
-    songs: [],
+    songs: []
   },
   reducers: {
     setUser: (state, action) => {
@@ -20,6 +20,9 @@ const globalSlice = createSlice({
     },
     setAlbums: (state, action) => {
       state.albums = action.payload
+    },
+    setSongs: (state, action) => {
+      state.songs = action.payload
     }
   }
 })

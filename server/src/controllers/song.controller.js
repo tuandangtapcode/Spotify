@@ -54,6 +54,15 @@ const updateSong = async (req, res) => {
   }
 }
 
+const plusListen = async (req, res) => {
+  try {
+    const data = await SongService.fncPlusListen(req)
+    return res.status(data.statusCode).json(data)
+  } catch (error) {
+    return res.status(500).json(error.toString())
+  }
+}
+
 
 const SongController = {
   createSong,
@@ -61,7 +70,8 @@ const SongController = {
   getAllSongByAlbum,
   getAllSongByArtist,
   deleteSong,
-  updateSong
+  updateSong,
+  plusListen
 }
 
 export default SongController

@@ -65,3 +65,14 @@ hr {
   border-top: 1px solid rgb(41, 41, 41);
 }
 `
+
+export const DotStyled = styled.img`
+width: 5px;
+height: 5px;
+background-color: white;
+display: inline-block;
+border-radius: 50%;
+margin-left: 6px;
+margin-right: 6px;
+margin-top: 10px;
+`

@@ -1,7 +1,9 @@
+import { getLocalStorage } from "src/lib/commonFunction"
 import http from "../index"
 import {
   apiCreateAlbum,
   apiDeleteAlbum,
+  apiGetAllAlbum,
   apiGetAllAlbumByArtist,
   apiGetDetailAlbum,
   apiUpdateAlbum
@@ -10,22 +12,27 @@ import {
 const createAlbum = body => http.post(apiCreateAlbum, body, {
   headers: {
     'Content-Type': 'multipart/form-data',
-    'token': `Bearer ${localStorage.getItem('token')}`
+    'token': `Bearer ${getLocalStorage('token')}`
   }
 })
-const getDetailAlbum = AlbumID => http.get(`${apiGetDetailAlbum}/${AlbumID}`)
+const getDetailAlbum = AlbumID => http.get(`${apiGetDetailAlbum}/${AlbumID}`, {
+  headers: {
+    'token': `Bearer ${getLocalStorage('token')}`
+  }
+})
 const getAllAlbumByArtist = body => http.post(apiGetAllAlbumByArtist, body)
 const updateAlbum = body => http.post(apiUpdateAlbum, body, {
   headers: {
     'Content-Type': 'multipart/form-data',
-    'token': `Bearer ${localStorage.getItem('token')}`
+    'token': `Bearer ${getLocalStorage('token')}`
   }
 })
 const deleteAlbum = AlbumID => http.get(`${apiDeleteAlbum}/${AlbumID}`, {
   headers: {
-    'token': `Bearer ${localStorage.getItem('token')}`
+    'token': `Bearer ${getLocalStorage('token')}`
   }
 })
+const getAllAlbum = body => http.post(apiGetAllAlbum, body)
 
 
 const AlbumService = {
@@ -33,7 +40,8 @@ const AlbumService = {
   getDetailAlbum,
   getAllAlbumByArtist,
   updateAlbum,
-  deleteAlbum
+  deleteAlbum,
+  getAllAlbum
 }
 
 export default AlbumService

@@ -44,7 +44,7 @@ const LibraryItem = ({ libraryItem }) => {
         onClick: () => {
           ConfirmModal({
             title: "Xóa khỏi Thư viện?",
-            description: `Thao tác này sẽ xóa ${data?.title} khỏi thư viện.`,
+            description: `Thao tác này sẽ xóa ${data?.Title} khỏi thư viện.`,
             okText: "Xóa",
             cancelText: "Hủy",
             onOk: async close => {
@@ -65,16 +65,16 @@ const LibraryItem = ({ libraryItem }) => {
         }}
         trigger={['contextMenu']}
       >
-        <LibraryItemStyled className="d-flex" onClick={() => navigate(`/playlist/${libraryItem?._id}`)}>
+        <LibraryItemStyled className="d-flex" onClick={() => navigate(`/${libraryItem?.Type}/${libraryItem?._id}`)}>
           <div className="image mr-8">
-            <img style={{ width: '50px', height: '100%', borderRadius: '8px' }} src={libraryItem?.AvatarPath} alt="" />
+            <img style={{ width: '50px', height: '50px', borderRadius: '8px' }} src={libraryItem?.AvatarPath} alt="" />
           </div>
           <div className="infor d-flex flex-column justify-content-center">
             <div className="text fs-18 fw-600">
               {libraryItem?.Title}
             </div>
             <div className="text-gray-than">
-              {libraryItem?.Type}
+              {libraryItem?.Subtitle}
             </div>
           </div>
         </LibraryItemStyled>

@@ -3,6 +3,7 @@ const UserRoute = express.Router()
 import UserController from "../controllers/user.controller.js"
 import authMiddleware from "../middlewares/auth.middleware.js"
 import { Roles } from "../utils/lib.js"
+import upload from "../middlewares/clouddinary.middleware.js"
 
 UserRoute.post("/login",
   UserController.login
@@ -28,7 +29,8 @@ UserRoute.get("/getDetailProfile",
   UserController.getDetailProfile
 )
 UserRoute.post("/updateProfile",
-  authMiddleware([Roles.ROLE_ARTIST, Roles.ROLE_CUSTOMER_NORMAL, Roles.ROLE_CUSTOMER_PREMIUM]),
+  upload("Avatar").single("Avatar"),
+  authMiddleware([Roles.ROLE_ADMIN, Roles.ROLE_ARTIST, Roles.ROLE_CUSTOMER_NORMAL, Roles.ROLE_CUSTOMER_PREMIUM]),
   UserController.updateProfile
 )
 UserRoute.get("/deactiveAccount/:UserID",
@@ -50,6 +52,23 @@ UserRoute.get("/getDetailPlaylist/:PlaylistID",
 UserRoute.get("/deletePlaylist/:PlaylistID",
   authMiddleware([Roles.ROLE_ARTIST, Roles.ROLE_CUSTOMER_NORMAL, Roles.ROLE_CUSTOMER_PREMIUM]),
   UserController.deletePlaylist
+)
+UserRoute.post("/updatePlaylist",
+  upload("Avatar").single("Avatar"),
+  authMiddleware([Roles.ROLE_ARTIST, Roles.ROLE_CUSTOMER_NORMAL, Roles.ROLE_CUSTOMER_PREMIUM]),
+  UserController.updatePlaylist
+)
+UserRoute.post("/addOrDeleteLoveSong",
+  authMiddleware([Roles.ROLE_ARTIST, Roles.ROLE_CUSTOMER_NORMAL, Roles.ROLE_CUSTOMER_PREMIUM]),
+  UserController.addOrDeleteLoveSong
+)
+UserRoute.post("/addOrDeleteAlbum",
+  authMiddleware([Roles.ROLE_ARTIST, Roles.ROLE_CUSTOMER_NORMAL, Roles.ROLE_CUSTOMER_PREMIUM]),
+  UserController.addOrDeleteAlbum
+)
+UserRoute.get("/getListArtist",
+  authMiddleware([Roles.ROLE_ARTIST]),
+  UserController.getListArtist
 )
 
 export default UserRoute

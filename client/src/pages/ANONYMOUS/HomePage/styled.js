@@ -1,7 +1,7 @@
-import styled from "styled-components";
+import styled from "styled-components"
 
 export const ContentStyled = styled.div`
-padding: 8px 30px;
+padding: 8px 30px 16px 30px;
 hr {
   margin: 70px 0;
   border-image: initial;

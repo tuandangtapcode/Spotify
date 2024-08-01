@@ -9,6 +9,8 @@ import { useEffect, useRef, useState } from "react"
 import { convertSecondsToMinutesAndSeconds, convertSecondsToMinutesAndSecondsWithView } from "src/lib/stringUtils"
 import globalSlice from "src/redux/globalSlice"
 import ListIcons from "../ListIcons"
+import SongService from "src/services/SongService"
+import { getLocalStorage, removeLocalStorage, setLocalStorage } from "src/lib/commonFunction"
 
 const CurrentMusic = () => {
 
@@ -18,48 +20,49 @@ const CurrentMusic = () => {
   const [volume, setVolume] = useState(1)
   const dispatch = useDispatch()
   const audioRef = useRef()
+  const [isChangeListen, setIsChangeListen] = useState(false)
 
   const handleNextPreviousSong = (type) => {
     const indexCurrentSong = global?.songs.findIndex(i => i?._id === global?.currentSong?._id)
     if (type === 'prev') {
       if (indexCurrentSong === 0) {
         audioRef.current.currentTime = 0
-        if (!!localStorage.getItem('currentTime')) {
-          localStorage.removeItem('currentTime')
+        if (!!getLocalStorage('currentTime')) {
+          removeLocalStorage('currentTime')
         }
-        if (!!localStorage.getItem('currentSlider')) {
-          localStorage.removeItem('currentSlider')
+        if (!!getLocalStorage('currentSlider')) {
+          removeLocalStorage('currentSlider')
         }
         dispatch(globalSlice.actions.setIsPlay(false))
       } else {
-        localStorage.setItem('currentSong', JSON.stringify(global?.songs[indexCurrentSong - 1]))
-        if (!!localStorage.getItem('currentTime')) {
-          localStorage.removeItem('currentTime')
+        setLocalStorage('currentSong', JSON.stringify(global?.songs[indexCurrentSong - 1]))
+        if (!!getLocalStorage('currentTime')) {
+          removeLocalStorage('currentTime')
         }
-        if (!!localStorage.getItem('currentSlider')) {
-          localStorage.removeItem('currentSlider')
+        if (!!getLocalStorage('currentSlider')) {
+          removeLocalStorage('currentSlider')
         }
         dispatch(globalSlice.actions.setCurrentSong(global?.songs[indexCurrentSong - 1]))
         dispatch(globalSlice.actions.setIsPlay(false))
       }
     } else {
       if (indexCurrentSong === (global?.songs.length - 1)) {
-        localStorage.setItem('currentSong', JSON.stringify(global?.songs[0]))
-        if (!!localStorage.getItem('currentTime')) {
-          localStorage.removeItem('currentTime')
+        setLocalStorage('currentSong', JSON.stringify(global?.songs[0]))
+        if (!!getLocalStorage('currentTime')) {
+          removeLocalStorage('currentTime')
         }
-        if (!!localStorage.getItem('currentSlider')) {
-          localStorage.removeItem('currentSlider')
+        if (!!getLocalStorage('currentSlider')) {
+          removeLocalStorage('currentSlider')
         }
         dispatch(globalSlice.actions.setCurrentSong(global?.songs[0]))
         dispatch(globalSlice.actions.setIsPlay(false))
       } else {
-        localStorage.setItem('currentSong', JSON.stringify(global?.songs[indexCurrentSong + 1]))
-        if (!!localStorage.getItem('currentTime')) {
-          localStorage.removeItem('currentTime')
+        setLocalStorage('currentSong', JSON.stringify(global?.songs[indexCurrentSong + 1]))
+        if (!!getLocalStorage('currentTime')) {
+          removeLocalStorage('currentTime')
         }
-        if (!!localStorage.getItem('currentSlider')) {
-          localStorage.removeItem('currentSlider')
+        if (!!getLocalStorage('currentSlider')) {
+          removeLocalStorage('currentSlider')
         }
         dispatch(globalSlice.actions.setCurrentSong(global?.songs[indexCurrentSong + 1]))
         dispatch(globalSlice.actions.setIsPlay(false))
@@ -67,14 +70,27 @@ const CurrentMusic = () => {
     }
   }
 
+  const changeListens = async () => {
+    const res = await SongService.plusListen(global?.currentSong?._id)
+    if (res?.isError) return
+    setIsChangeListen(true)
+  }
+
   useEffect(() => {
-    if (!!localStorage.getItem('currentTime')) {
-      const time = localStorage.getItem('currentTime')
-      audioRef.current.currentTime = time
-      setCurrentTime(localStorage.getItem('currentTime'))
+    if (!!getLocalStorage('currentSong')) {
+      const song = JSON.parse(getLocalStorage('currentSong'))
+      dispatch(globalSlice.actions.setCurrentSong(song))
     }
-    if (!!localStorage.getItem('currentSlider')) {
-      setCurrentSlider(localStorage.getItem('currentSlider'))
+  }, [getLocalStorage('currentSong')])
+
+  useEffect(() => {
+    if (!!getLocalStorage('currentTime')) {
+      const time = getLocalStorage('currentTime')
+      audioRef.current.currentTime = time
+      setCurrentTime(getLocalStorage('currentTime'))
+    }
+    if (!!getLocalStorage('currentSlider')) {
+      setCurrentSlider(getLocalStorage('currentSlider'))
     }
   }, [])
 
@@ -92,11 +108,25 @@ const CurrentMusic = () => {
     }
   }, [global?.isPlay, global?.currentSong])
 
+  useEffect(() => {
+    if (
+      !!global?.isPlay &&
+      !isChangeListen &&
+      currentSlider > 65
+    ) {
+      changeListens()
+    }
+  }, [currentSlider, global?.isPlay])
+
+  useEffect(() => {
+    setIsChangeListen(false)
+  }, [global?.currentSong])
+
 
   return (
     <CurrentMusicStyled >
       {
-        localStorage.getItem('currentSong') ?
+        getLocalStorage('currentSong') ?
           <div className="current-music d-flex align-items-center" style={{ width: '20%' }}>
             <div className="mr-12">
               <img style={{ width: '40px', height: '40px' }} src={global?.currentSong?.AvatarPath} alt="" />
@@ -112,13 +142,13 @@ const CurrentMusic = () => {
       <div className="control-music" style={{ width: '40%' }}>
         <div className="control d-flex-sb" style={{ maxWidth: '200px', margin: 'auto' }}>
           <div className="icon-random">
-            <BiShuffle className={localStorage.getItem('currentSong') ? "text fs-23" : "text-gray fs-23"} />
+            <BiShuffle className={getLocalStorage('currentSong') ? "text fs-23" : "text-gray fs-23"} />
           </div>
           <div className="icon-previous">
             <RiSkipBackFill
-              className={localStorage.getItem('currentSong') ? "text fs-23" : "text-gray fs-23"}
+              className={getLocalStorage('currentSong') ? "text fs-23" : "text-gray fs-23"}
               onClick={() => {
-                if (!!localStorage.getItem('currentSong')) {
+                if (!!getLocalStorage('currentSong')) {
                   handleNextPreviousSong('prev')
                 } else return
               }}
@@ -126,9 +156,9 @@ const CurrentMusic = () => {
           </div>
           <div className="icon-play">
             <ButtonCicleStyled
-              className={localStorage.getItem('currentSong') ? 'smallCircle normal icon-play' : 'smallCircle grayBackgroundColor icon-play'}
+              className={getLocalStorage('currentSong') ? 'smallCircle normal icon-play' : 'smallCircle grayBackgroundColor icon-play'}
               onClick={() => {
-                if (localStorage.getItem('currentSong')) {
+                if (getLocalStorage('currentSong')) {
                   if (global?.isPlay) {
                     audioRef.current.pause()
                     dispatch(globalSlice.actions.setIsPlay(false))
@@ -148,16 +178,16 @@ const CurrentMusic = () => {
           </div>
           <div className="icon-next">
             <RiSkipForwardFill
-              className={localStorage.getItem('currentSong') ? "text fs-23" : "text-gray fs-23"}
+              className={getLocalStorage('currentSong') ? "text fs-23" : "text-gray fs-23"}
               onClick={() => {
-                if (!!localStorage.getItem('currentSong')) {
+                if (!!getLocalStorage('currentSong')) {
                   handleNextPreviousSong('next')
                 } else return
               }}
             />
           </div>
           <div className="icon-repeat">
-            <FiRepeat className={localStorage.getItem('currentSong') ? "text fs-21" : "text-gray fs-21"} />
+            <FiRepeat className={getLocalStorage('currentSong') ? "text fs-21" : "text-gray fs-21"} />
           </div>
         </div>
         <audio
@@ -167,9 +197,12 @@ const CurrentMusic = () => {
             if (currentSlider === 100) {
               dispatch(globalSlice.actions.setIsPlay(false))
             }
-            localStorage.setItem('currentTime', audioRef.current.currentTime)
-            localStorage.setItem('currentSlider', currentSlider)
+            setLocalStorage('currentTime', audioRef.current.currentTime)
+            setLocalStorage('currentSlider', currentSlider)
             setCurrentSlider(currentSlider)
+            if (currentSlider > 65 && !!global?.isPlay) {
+              changeListens()
+            }
           }}
           ref={audioRef}
           src={global?.currentSong?.AudioPath}
@@ -177,7 +210,7 @@ const CurrentMusic = () => {
         />
         <div className="progress-bar d-flex">
           {
-            !!localStorage.getItem('currentSong') ?
+            !!getLocalStorage('currentSong') ?
               <div className="text mt-7 fs-13">
                 {convertSecondsToMinutesAndSecondsWithView(
                   !!audioRef.current ?
@@ -192,16 +225,19 @@ const CurrentMusic = () => {
             <SliderStyled
               min={0}
               max={100}
+              tooltip={{
+                open: false
+              }}
               value={currentSlider}
               onChange={e => {
                 audioRef.current.currentTime = e / 100 * audioRef.current.duration
-                localStorage.setItem('currentSlider', e)
+                setLocalStorage('currentSlider', e)
                 setCurrentSlider(e)
               }}
             />
           </div>
           {
-            !!localStorage.getItem('currentSong') ?
+            !!getLocalStorage('currentSong') ?
               <div className="text mt-7 fs-13">
                 {convertSecondsToMinutesAndSeconds(global?.currentSong?.Time)}
               </div>
@@ -222,10 +258,13 @@ const CurrentMusic = () => {
         }
         <SliderStyled
           style={{ width: '100px' }}
+          tooltip={{
+            open: false
+          }}
           step={0.1}
           min={0}
           max={1}
-          value={!!localStorage.getItem('currentSong') ? volume : 0}
+          value={!!getLocalStorage('currentSong') ? volume : 0}
           onChange={e => {
             setVolume(e)
           }}

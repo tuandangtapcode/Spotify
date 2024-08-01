@@ -8,6 +8,7 @@ import { useState } from "react"
 import ListIcons from "src/components/ListIcons"
 import { menuItem } from "./menuitem"
 import socket from "src/utils/socket"
+import { removeLocalStorage } from "src/lib/commonFunction"
 
 const LayoutAdmin = ({ children }) => {
 
@@ -17,7 +18,7 @@ const LayoutAdmin = ({ children }) => {
   const [collapsed, setCollapsed] = useState(false)
 
   const handleLogout = () => {
-    localStorage.removeItem('token')
+    removeLocalStorage('token')
     dispatch(globalSlice.actions.setUser({}))
     socket.disconnect()
     navigate('/login')
@@ -33,7 +34,7 @@ const LayoutAdmin = ({ children }) => {
 
   return (
     <LayoutAdminStyled>
-      <Header />
+      <Header isAdmin={true} />
       <Row>
         <Col span={collapsed ? 2 : 4}>
           <div

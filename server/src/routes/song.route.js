@@ -6,11 +6,12 @@ import authMiddleware from "../middlewares/auth.middleware.js"
 import { Roles } from "../utils/lib.js"
 
 SongRoute.post("/createSong",
-  upload('MP3').fields([{ name: 'audio', maxCount: 1 }, { name: 'avatar', maxCount: 1 }]),
+  upload('MP3').fields([{ name: 'Audio', maxCount: 1 }, { name: 'Avatar', maxCount: 1 }]),
   authMiddleware([Roles.ROLE_ARTIST]),
   SongController.createSong
 )
 SongRoute.get("/getDetailSong/:SongID",
+  authMiddleware([Roles.ROLE_ARTIST, Roles.ROLE_CUSTOMER_NORMAL, Roles.ROLE_CUSTOMER_PREMIUM]),
   SongController.getDetailSong
 )
 SongRoute.post("/getAllSongByAlbum",
@@ -24,9 +25,13 @@ SongRoute.get("/deleteSong/:SongID",
   SongController.deleteSong
 )
 SongRoute.post("/updateSong",
-  upload('MP3').fields([{ name: 'audio', maxCount: 1 }, { name: 'avatar', maxCount: 1 }]),
+  upload('MP3').fields([{ name: 'Audio', maxCount: 1 }, { name: 'Avatar', maxCount: 1 }]),
   authMiddleware([Roles.ROLE_ARTIST]),
   SongController.updateSong
+)
+SongRoute.get("/plusListen/:SongID",
+  authMiddleware([Roles.ROLE_ARTIST, Roles.ROLE_CUSTOMER_NORMAL, Roles.ROLE_CUSTOMER_PREMIUM]),
+  SongController.plusListen
 )
 
 export default SongRoute

@@ -18,6 +18,15 @@ const getDetailAlbum = async (req, res) => {
   }
 }
 
+const getAllAlbum = async (req, res) => {
+  try {
+    const data = await AlbumService.fncGetAllAlbum(req)
+    return res.status(data.statusCode).json(data)
+  } catch (error) {
+    return res.status(500).json(error.toString())
+  }
+}
+
 const getAllAlbumByArtist = async (req, res) => {
   try {
     const data = await AlbumService.fncGetAllAlbumByArtist(req)
@@ -51,7 +60,8 @@ const AlbumController = {
   getDetailAlbum,
   getAllAlbumByArtist,
   updateAlbum,
-  deleteAlbum
+  deleteAlbum,
+  getAllAlbum
 }
 
 export default AlbumController

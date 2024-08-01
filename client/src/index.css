@@ -39,6 +39,10 @@ body {
   color: white;
 }
 
+.ant-dropdown-menu-submenu-expand-icon {
+  display: none !important;
+}
+
 .noBackground {
   background-color: transparent;
 }
@@ -69,6 +73,20 @@ body {
 
 .text-red {
   color: red;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.text-click {
+  color: white;
+}
+
+.text-click:hover {
+  color: white;
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 @keyframes iconFadeIn {

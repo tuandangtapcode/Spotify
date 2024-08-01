@@ -2,6 +2,8 @@ import { Form } from "antd"
 import AfterFirstStep from "../AfterFirstStep"
 import InputCustom from "src/components/InputCustom"
 import ButtonCustom from "src/components/ButtonCustom/MyButton"
+import { DotStyled } from "../../styled"
+import { getRegexPassowrd } from "src/lib/stringUtils"
 
 const FormPassword = ({
   current,
@@ -28,14 +30,26 @@ const FormPassword = ({
           className="mb-8"
           rules={[
             { required: true, message: 'Vui lòng nhập mật khẩu' },
+            { pattern: getRegexPassowrd(), message: "Mật khẩu sai định dạng" }
           ]}
         >
           <InputCustom
             type='isPassword'
           />
         </Form.Item>
-        <div className=" mb-20">
-          <span className="text-gray">Mật khẩu phải có ít nhất 8 ký tự. Bạn nên dùng ít nhất 1 chữ số và 1 ký tự đặc biệt.</span>
+        <div>
+          <p className="text-gray">
+            <DotStyled />
+            Ký tự đầu tiên phải là một chữ cái in hoa (A-Z)
+          </p>
+          <p className="text-gray">
+            <DotStyled />
+            Các ký tự tiếp theo có thể là chữ cái (in hoa hoặc in thường) hoặc chữ số (0-9)
+          </p>
+          <p className="text-gray">
+            <DotStyled />
+            Ít nhất 5 ký tự tiếp theo
+          </p>
         </div>
         <ButtonCustom
           className='submit fw-700 fs-16'

@@ -9,6 +9,11 @@ export const response = (data, isError, msg, statusCode) => {
   return { data, isError, msg, statusCode }
 }
 
+export const getOneDocument = async (model, filed, value) => {
+  const data = await model.findOne({ [filed]: value })
+  return data
+}
+
 export const Roles = {
   ROLE_ADMIN: 1,
   ROLE_ARTIST: 2,

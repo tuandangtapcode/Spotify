@@ -3,7 +3,7 @@ import { Form } from "antd"
 import { getRegexEmail } from "src/lib/stringUtils"
 import ButtonCustom from "src/components/ButtonCustom/MyButton"
 import { toast } from 'react-toastify'
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import globalSlice from "src/redux/globalSlice"
 import { jwtDecode } from "jwt-decode"
 import { useEffect, useState } from "react"
@@ -12,6 +12,8 @@ import UserService from "src/services/UserService"
 import { useGoogleLogin } from "@react-oauth/google"
 import socket from "src/utils/socket"
 import { Link, useNavigate } from "react-router-dom"
+import { globalSelector } from "src/redux/selector"
+import { setLocalStorage } from "src/lib/commonFunction"
 
 const LoginPage = () => {
 
@@ -19,6 +21,7 @@ const LoginPage = () => {
   const dispatch = useDispatch()
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
+  const global = useSelector(globalSelector)
 
   const handleLoginByForm = async () => {
     try {
@@ -40,6 +43,7 @@ const LoginPage = () => {
   const handleLoginByGoogle = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       try {
+        setLoading(true)
         const userInfor = await UserService.getInforByGoogleLogin(tokenResponse?.access_token)
         const res = await UserService.loginByGoogle(userInfor)
         if (res?.isError) return toast.error(res?.msg)
@@ -61,8 +65,8 @@ const LoginPage = () => {
       const res = await UserService.getDetailProfile(token)
       if (res?.isError) return toast.error(res?.msg)
       dispatch(globalSlice.actions.setUser(res?.data))
-      localStorage.setItem('token', token)
-      socket.connect()
+      setLocalStorage('token', token)
+      // socket.connect()
       if (res?.data?.RoleID === 1) navigate('/dashboard/users')
       else navigate('/')
     } finally {

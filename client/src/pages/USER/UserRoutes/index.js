@@ -1,22 +1,34 @@
-import { useSelector } from "react-redux"
+import { jwtDecode } from "jwt-decode"
+import { useLayoutEffect, useState } from "react"
 import { Navigate, Outlet } from "react-router-dom"
 import MainLayout from "src/components/Layout/MainLayout"
-import { globalSelector } from "src/redux/selector"
+import { getLocalStorage } from "src/lib/commonFunction"
+import ForbiddenPage from "src/pages/ERROR/ForbiddenPage"
 
 
 const UserRoutes = () => {
 
-  const global = useSelector(globalSelector)
+  const isLogin = getLocalStorage("token")
+  const [isUser, setIsUser] = useState(false)
+
+  useLayoutEffect(() => {
+    if (!!isLogin) {
+      const user = jwtDecode(getLocalStorage("token"))
+      if (user?.payload?.RoleID !== 1) setIsUser(true)
+    }
+  }, [isLogin])
 
   return (
     <>
       {
-        !!global?.user?._id && global?.user?.RoleID !== 1 ?
-          <MainLayout>
-            <Outlet />
-          </MainLayout>
+        !!isLogin ?
+          !!isUser ?
+            <MainLayout>
+              <Outlet />
+            </MainLayout>
+            : <ForbiddenPage />
           :
-          <Navigate to={'/guest'} />
+          <Navigate to={'/'} />
       }
     </>
   )

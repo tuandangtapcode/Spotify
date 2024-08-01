@@ -30,27 +30,32 @@ const UserSchema = new Schema({
     type: Boolean,
     default: true
   },
-  LoveSongs: {
-    type: [
-      {
-        SongID: { type: mongoose.Schema.Types.ObjectId, ref: 'Songs', required: true },
-        Type: { type: String, default: 'Bài hát yêu thích' },
-        AddedAt: { type: Date, default: Date.now },
-      }
-    ],
-    default: []
-  },
   Playlists: {
     type: [
       {
         Title: { type: String, required: true },
         Description: { type: String, default: "Mô tả" },
-        AvatarPath: { type: String, default: 'https://res.cloudinary.com/dgxlg5mhl/image/upload/v1698718351/spotify_fake/Avatar/jqz23hptwstcbru3riw9' },
-        Type: { type: String, default: 'Danh sách phát' },
+        AvatarPath: { type: String, default: 'https://res.cloudinary.com/dgxlg5mhl/image/upload/v1711697125/spotify_fake/Avatar/faqn4a2dvpbisk6smjio.png' },
+        Subtitle: { type: String, default: 'Danh sách phát' },
+        Type: { type: String, default: 'playlist' },
         AddedAt: { type: Date, default: Date.now },
         Songs: {
           type: [
-            { type: mongoose.Schema.Types.ObjectId, ref: 'Songs' }
+            {
+              Title: { type: String, required: true },
+              AvatarPath: { type: String, required: true },
+              Time: { type: Number, required: true },
+              Artist: {
+                type: [
+                  { type: mongoose.Schema.Types.ObjectId, ref: 'Users', require: true }
+                ],
+              },
+              Album: {
+                _id: { type: mongoose.Schema.Types.ObjectId, ref: 'Albums', required: true },
+                Title: { type: String, required: true }
+              },
+              AddedAt: { type: Date, default: Date.now }
+            }
           ],
           default: []
         }
@@ -61,8 +66,10 @@ const UserSchema = new Schema({
   Albums: {
     type: [
       {
-        AlbumID: { type: mongoose.Schema.Types.ObjectId, ref: 'Albums', required: true },
-        Type: { type: String, default: 'Album' },
+        Title: { type: String, required: true },
+        AvatarPath: { type: String, required: true },
+        Type: { type: String, default: 'album' },
+        Subtitle: { type: String, default: 'Album' },
         AddedAt: { type: Date, default: Date.now },
       }
     ],

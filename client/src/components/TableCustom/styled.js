@@ -1,13 +1,25 @@
 import styled from "styled-components"
 
 export const MainTableHeader = styled.div`
-  font-size: 13px !important;
+  font-weight: 700 !important;
+  color: ${props => !!props.isPlaying ? "rgb(29, 185, 84)" : "white"};
+  display: inline !important;
+  cursor: pointer!important;
+  width: 100% !important;
+  &:hover {
+    text-decoration: underline;
+  }
+
 `
 
 export const SubTableHeader = styled.div`
-  font-style: italic;
-  font-size: 13px !important;
-  font-weight: 400;
+  font-weight: 500 !important;
+  color: #6a6a6a;
+  cursor: pointer !important;
+  margin-right: 2px !important;
+  &:hover {
+    text-decoration: underline;
+  }
 `
 export const MainTableData = styled.span`
   overflow: hidden;
@@ -113,7 +125,6 @@ export const TableCustomStyled = styled.div`
     border-top-right-radius: 4px;
   }
   .ant-table-thead > tr > th {
-    text-align: center;
     padding: 4px 8px;
   }
 
@@ -192,6 +203,9 @@ export const TableCustomStyled = styled.div`
     cursor: pointer;
   }
   .ant-table-row-level-0:hover {
+    .sub-table-header {
+      color: white !important;
+    }
     .float-action__wrapper {
       display: inline-flex;
     }

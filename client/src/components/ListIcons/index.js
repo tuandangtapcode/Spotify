@@ -3,7 +3,8 @@ import {
   BsFillPauseFill,
   BsFillVolumeMuteFill,
   BsFillVolumeDownFill,
-  BsFillVolumeUpFill
+  BsFillVolumeUpFill,
+  BsCheck
 } from "react-icons/bs"
 
 import {
@@ -23,7 +24,13 @@ import {
 
 import { PiMusicNotesPlus } from "react-icons/pi"
 
-import { AiFillFolder } from "react-icons/ai"
+import {
+  AiFillFolder,
+  AiOutlinePlusCircle,
+  AiOutlineEllipsis,
+  AiFillEdit,
+  AiOutlineClockCircle
+} from "react-icons/ai"
 
 import {
   FaUser,
@@ -42,9 +49,10 @@ import {
 import { MdLibraryMusic } from "react-icons/md"
 
 const ListIcons = {
-  ICON_PLAY: <BsFillPlayFill className='fs-27' />,
+  ICON_PLAY: <BsFillPlayFill className='fs-24' />,
   ICON_PLAY_FS_30: <BsFillPlayFill className='fs-30' />,
   ICON_PAUSE: <BsFillPauseFill className='fs-24' />,
+  ICON_PAUSE_FS_30: <BsFillPauseFill className='fs-30' style={{ marginLeft: '-4px' }} />,
   ICON_VOLUME_MUTE: <BsFillVolumeMuteFill className="text fs-20" />,
   ICON_VOLUME_DOWN: <BsFillVolumeDownFill className="text fs-20" />,
   ICON_VOLUME_UP: <BsFillVolumeUpFill className="text fs-20" />,
@@ -52,7 +60,7 @@ const ListIcons = {
   ICON_SEARCH_FS_25: <SearchOutlined className='fs-25' />,
   ICON_CLOSE: <CloseOutlined className="text" />,
   ICON_ARROW_DOWN: <ArrowDownOutlined />,
-  ICON_BELL: < BellOutlined className="fs-18 text-gray-than" />,
+  ICON_BELL: < BellOutlined className="fs-18 text" />,
   ICON_BELL_DASHBOARD: < BellOutlined className="fs-18" />,
   ICON_USER: <UserOutlined className="fs-18 text" />,
   ICON_HOME: <HomeOutlined className='fs-25' />,
@@ -74,7 +82,12 @@ const ListIcons = {
   ICON_LOGOUT: <BiLogIn className="fs-20" />,
   ICON_BLOCK: <TbLock className="fs-18" />,
   ICON_UNBLOCK: <TbLockOpen className="fs-18" />,
-  ICON_ALBUM_DASHBOARD: <MdLibraryMusic className="fs-18" />
+  ICON_ALBUM_DASHBOARD: <MdLibraryMusic className="fs-18" />,
+  ICON_CLOCK: <AiOutlineClockCircle className="text" />,
+  ICON_PLUS_CIRCLE: <AiOutlinePlusCircle />,
+  ICON_ELLIPSIS: <AiOutlineEllipsis />,
+  ICON_CHECK: <BsCheck className="fw-800" />,
+  ICON_EDIt: <AiFillEdit className="text-green fs-18" />,
 }
 
 export default ListIcons

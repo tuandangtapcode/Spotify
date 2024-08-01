@@ -1,14 +1,13 @@
 import { Table, Empty } from "antd"
 import { TableCustomStyled } from "./styled"
 
-function TableCustom(props) {
+const TableCustom = (props) => {
   return (
     <TableCustomStyled
       isPrimary={props?.isPrimary}
       showPagination={props?.showPagination}
     >
       <Table
-        bordered
         locale={{
           emptyText: (
             <Empty

@@ -5,7 +5,7 @@ export const HeaderStyled = styled.div`
 min-height: 74px;
 padding: 12px 30px;
 border-radius: 4px;
-background-color: black;
+background: ${props => !!props.isAdmin ? "black" : `${props.background}`};
 `
 
 export const InputHeaderStyled = styled(Input)`

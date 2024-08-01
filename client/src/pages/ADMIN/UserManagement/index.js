@@ -9,6 +9,7 @@ import SpinCustom from "src/components/SpinCustom"
 import TableCustom from "src/components/TableCustom"
 import { roles } from "src/lib/constant"
 import UserService from "src/services/UserService"
+import ModalInsertUpdateAccoutArtist from "./components/ModalInsertUpdateAccoutArtist"
 
 const UserManagement = () => {
 
@@ -18,8 +19,9 @@ const UserManagement = () => {
   const [pagination, setPagination] = useState({
     TextSearch: "",
     CurrentPage: 1,
-    PageSize: 4,
+    PageSize: 5,
   })
+  const [openInsertUpdateAccoutArtist, setOpenInsertUpdateAccountArtist] = useState(false)
 
   const getListUser = async () => {
     try {
@@ -40,8 +42,9 @@ const UserManagement = () => {
   const lstBtn = (record) => (
     [
       {
-        name: 'Ban',
+        name: 'Cấm',
         disabled: record?.IsActive ? false : true,
+        isEnabled: true,
         icon: ListIcons.ICON_BLOCK,
         onClick: () => {
           ConfirmModal({
@@ -57,8 +60,9 @@ const UserManagement = () => {
         }
       },
       {
-        name: 'Unban',
+        name: 'Bỏ cấm',
         disabled: record?.IsActive ? true : false,
+        isEnabled: true,
         icon: ListIcons.ICON_UNBLOCK,
         onClick: () => {
           ConfirmModal({
@@ -72,6 +76,12 @@ const UserManagement = () => {
             },
           })
         }
+      },
+      {
+        name: "Chỉnh sửa",
+        icon: ListIcons.ICON_EDIt,
+        isEnabled: record?.RoleID === 2,
+        onClick: () => setOpenInsertUpdateAccountArtist(record)
       }
     ]
   )
@@ -94,9 +104,9 @@ const UserManagement = () => {
       title: "Role",
       align: "center",
       render: (_, record, index) => (
-        roles.map(i =>
-          i.RoleID === record?.RoleID && <span>{i?.RoleName}</span>
-        )
+        <span>
+          {roles?.find(i => i?.RoleID === record?.RoleID)?.RoleName}
+        </span>
       ),
     },
     {
@@ -125,6 +135,7 @@ const UserManagement = () => {
       render: (_, record) => (
         <Space>
           {lstBtn(record).map(i =>
+            i?.isEnabled &&
             <ButtonCircle
               disabled={i?.disabled}
               className="normal"
@@ -144,15 +155,16 @@ const UserManagement = () => {
         <h2>Quản lý người dùng</h2>
         <ButtonCustom
           className="borderGreen medium"
+          onClick={() => setOpenInsertUpdateAccountArtist(true)}
         >
-          Thêm account nghệ sĩ
+          Thêm tài khoản nghệ sĩ
         </ButtonCustom>
       </div>
       <TableCustom
         columns={column}
         dataSource={users}
         pagination={{
-          hideOnSinglePage: total <= 10,
+          hideOnSinglePage: total <= 5,
           current: pagination?.CurrentPage,
           pageSize: pagination?.PageSize,
           responsive: true,
@@ -167,6 +179,15 @@ const UserManagement = () => {
             }),
         }}
       />
+
+      {
+        !!openInsertUpdateAccoutArtist &&
+        <ModalInsertUpdateAccoutArtist
+          open={openInsertUpdateAccoutArtist}
+          onCancel={() => setOpenInsertUpdateAccountArtist(false)}
+          onOk={() => getListUser()}
+        />
+      }
     </SpinCustom>
   )
 }

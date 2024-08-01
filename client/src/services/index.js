@@ -5,7 +5,9 @@ const parseBody = (response) => {
   return resData
 }
 
-const instance = axios.create()
+const instance = axios.create({
+  timeout: 60000
+})
 
 instance.interceptors.request.use(
   config => {

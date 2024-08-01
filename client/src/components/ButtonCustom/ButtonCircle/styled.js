@@ -2,8 +2,8 @@ import { Button } from "antd"
 import styled from "styled-components"
 
 export const ButtonCicleStyled = styled(Button)`
-  border-radius: 50%;
-  border-color: transparent;
+  border-radius: 50% !important;
+  border-color: transparent !important;
   transition: transform 0.3s ease;
   transform-origin: center bottom;
   &:hover {

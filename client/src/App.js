@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react"
 import SpinCustom from "./components/SpinCustom"
-import { useNavigate, useRoutes } from "react-router-dom"
+import { useLocation, useNavigate, useRoutes } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { globalSelector } from "./redux/selector"
 import UserService from "./services/UserService"
 import globalSlice from "./redux/globalSlice"
 import { jwtDecode } from "jwt-decode"
 import { ToastContainer } from "react-toastify"
-import socket from "./utils/socket"
+import { getLocalStorage, removeLocalStorage } from "./lib/commonFunction"
+import NotFoundPage from "./pages/ERROR/NotFoundPage"
 
 
 // ADMIN
@@ -153,7 +154,15 @@ const routes = [
         )
       },
     ]
-  }
+  },
+  {
+    path: "*",
+    element: (
+      <LazyLoadingComponent>
+        <NotFoundPage />
+      </LazyLoadingComponent>
+    ),
+  },
 ]
 
 const App = () => {
@@ -163,16 +172,18 @@ const App = () => {
   const global = useSelector(globalSelector)
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
+  const location = useLocation()
+  console.log("location", location.pathname.split("/")[1]);
 
   const getDetailProfile = async (token) => {
     try {
       setLoading(true)
       const res = await UserService.getDetailProfile(token)
       if (res?.isError) {
-        localStorage.removeItem('token')
+        removeLocalStorage("token")
         return
       }
-      socket.connect()
+      // socket.connect()
       dispatch(globalSlice.actions.setUser(res?.data))
     } finally {
       setLoading(false)
@@ -180,15 +191,23 @@ const App = () => {
   }
 
   useEffect(() => {
-    if (!!localStorage.getItem('token')) {
-      const user = jwtDecode(localStorage.getItem('token'))
+    if (!!getLocalStorage("token")) {
+      const user = jwtDecode(getLocalStorage("token"))
       if (!!user?.payload?.ID) {
-        getDetailProfile(localStorage.getItem('token'))
+        getDetailProfile(getLocalStorage("token"))
       } else {
         navigate('/forbidden')
       }
     }
   }, [])
+
+  useEffect(() => {
+    if (!!getLocalStorage("songs")) {
+      const songs = getLocalStorage("songs")
+      dispatch(globalSlice.actions.setSongs(JSON.parse(songs)))
+    }
+  }, [getLocalStorage("songs")])
+
 
   return (
     <div className="App">

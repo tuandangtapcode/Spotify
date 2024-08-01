@@ -9,6 +9,8 @@ import FormInfor from "./components/FormInfor"
 import FormTermConditions from "./components/FormTermConditions"
 import { toast } from 'react-toastify'
 import UserService from "src/services/UserService"
+import { useSelector } from "react-redux"
+import { globalSelector } from "src/redux/selector"
 
 
 const SignupPage = () => {
@@ -18,6 +20,7 @@ const SignupPage = () => {
   const [current, setCurrent] = useState(0)
   const [loading, setLoading] = useState(false)
   const [data, setData] = useState({})
+  const global = useSelector(globalSelector)
 
   const handleRegister = async () => {
     try {
@@ -89,7 +92,7 @@ const SignupPage = () => {
   }))
 
   useEffect(() => {
-    if (!!localStorage.getItem('item')) navigate('/')
+    if (!!global?.user?._id) navigate('/')
   }, [])
 
   return (

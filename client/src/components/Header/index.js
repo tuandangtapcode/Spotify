@@ -12,8 +12,9 @@ import { LogoStyled } from "../Sidebar/styled"
 import socket from "src/utils/socket"
 import NotificationService from "src/services/NotificationService"
 import NotificationItem from "./components/NotificationItem"
+import { removeLocalStorage } from "src/lib/commonFunction"
 
-const Header = () => {
+const Header = ({ isAdmin }) => {
 
   const global = useSelector(globalSelector)
   const navigate = useNavigate()
@@ -24,10 +25,10 @@ const Header = () => {
   const [notifiNotSeen, setNotifiNotSeen] = useState(0)
 
   const handleLogout = () => {
-    localStorage.removeItem('token')
-    localStorage.removeItem('currentSong')
-    localStorage.removeItem('currentTime')
-    localStorage.removeItem('currentSlider')
+    removeLocalStorage('token')
+    removeLocalStorage('currentSong')
+    removeLocalStorage('currentTime')
+    removeLocalStorage('currentSlider')
     dispatch(globalSlice.actions.setUser({}))
     socket.disconnect()
     navigate('/login')
@@ -72,7 +73,7 @@ const Header = () => {
     {
       label: 'Hồ sơ',
       key: '1',
-      onClick: () => navigate(`/user/${global?.user?._id}`)
+      onClick: () => navigate("/profile")
     },
     {
       label: 'Nâng cấp lên Premium',
@@ -99,7 +100,10 @@ const Header = () => {
 
 
   return (
-    <HeaderStyled className="d-flex-sb">
+    <HeaderStyled
+      isAdmin={isAdmin}
+      className="d-flex-sb"
+    >
       {
         location.pathname.includes('search') ?
           <div className="search">

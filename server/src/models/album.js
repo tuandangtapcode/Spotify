@@ -14,9 +14,9 @@ const AlbumSchema = new Schema({
     type: String,
     require: true
   },
-  Like: {
-    type: Number,
-    default: 0
+  Background: {
+    type: String,
+    require: true
   },
   Followers: {
     type: [

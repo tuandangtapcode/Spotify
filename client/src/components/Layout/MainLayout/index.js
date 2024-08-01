@@ -1,16 +1,14 @@
 import Sidebar from "src/components/Sidebar"
 import { ContainerStyled, ContentStyled, FooterStyled, LayoutStyled } from "../styled"
-import { useLocation, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import ButtonCustom from "src/components/ButtonCustom/MyButton"
 import CurrentMusic from "src/components/CurrentMusic"
-import Header from "src/components/Header"
 import { useSelector } from "react-redux"
 import { globalSelector } from "src/redux/selector"
 
 const MainLayout = ({ children }) => {
 
   const navigate = useNavigate()
-  const location = useLocation()
   const global = useSelector(globalSelector)
 
   return (
@@ -18,9 +16,6 @@ const MainLayout = ({ children }) => {
       <LayoutStyled>
         <Sidebar />
         <ContentStyled>
-          <div className={location.pathname.includes('search') ? "backgroundBlack" : ""}>
-            <Header />
-          </div>
           {children}
         </ContentStyled>
       </LayoutStyled>

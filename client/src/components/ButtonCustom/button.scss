@@ -55,10 +55,16 @@
   }
 }
 
+.miniCircle {
+  padding: 0px !important;
+  height: 15px !important;
+  width: 15px !important;
+}
+
 .smallCircle {
-  padding: 15px 15px 15px 18px !important;
+  padding: 15px 15px 15px 16px !important;
   height: 20px !important;
-  width: 20px !important;
+  width: 30px !important;
 }
 
 .mediumCircle {
@@ -86,7 +92,7 @@
 }
 
 .haflLarge {
-  padding: 10px 25px 35px 25px !important;
+  padding: 10px 25px 33px 25px !important;
   border-radius: 30px !important;
 }
 

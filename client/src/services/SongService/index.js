@@ -1,3 +1,4 @@
+import { getLocalStorage } from "src/lib/commonFunction"
 import http from "../index"
 import {
   apiCreateSong,
@@ -5,26 +6,40 @@ import {
   apiGetAllSongByAlbum,
   apiGetAllSongByArtist,
   apiGetDetailSong,
+  apiPlusListen,
   apiUpdateSong
 } from "./urls"
 
 const createSong = body => http.post(apiCreateSong, body, {
   headers: {
     'Content-Type': 'multipart/form-data',
-    'token': `Bearer ${localStorage.getItem('token')}`
+    'token': `Bearer ${getLocalStorage('token')}`
   }
 })
-const getDetailSong = SongID => http.get(`${apiGetDetailSong}/${SongID}`)
+const getDetailSong = SongID => http.get(`${apiGetDetailSong}/${SongID}`, {
+  headers: {
+    'token': `Bearer ${getLocalStorage('token')}`
+  }
+})
 const getAllSongByAlbum = body => http.post(apiGetAllSongByAlbum, body)
-const getAllSongByArtist = body => http.post(apiGetAllSongByArtist, body)
+const getAllSongByArtist = body => http.post(apiGetAllSongByArtist, body, {
+  headers: {
+    'token': `Bearer ${getLocalStorage('token')}`
+  }
+})
 const deleteSong = SongID => http.get(`${apiDeleteSong}/${SongID}`, {
   headers: {
-    'token': `Bearer ${localStorage.getItem('token')}`
+    'token': `Bearer ${getLocalStorage('token')}`
   }
 })
 const updateSong = body => http.post(apiUpdateSong, body, {
   headers: {
-    'token': `Bearer ${localStorage.getItem('token')}`
+    'token': `Bearer ${getLocalStorage('token')}`
+  }
+})
+const plusListen = SongID => http.get(`${apiPlusListen}/${SongID}`, {
+  headers: {
+    'token': `Bearer ${getLocalStorage('token')}`
   }
 })
 
@@ -35,7 +50,8 @@ const SongService = {
   getAllSongByAlbum,
   getAllSongByArtist,
   deleteSong,
-  updateSong
+  updateSong,
+  plusListen
 }
 
 export default SongService

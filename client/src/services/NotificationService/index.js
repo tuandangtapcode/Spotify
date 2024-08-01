@@ -1,3 +1,4 @@
+import { getLocalStorage } from "src/lib/commonFunction"
 import http from "../index"
 import {
   apiCreateNotification,
@@ -8,12 +9,12 @@ import {
 const createNotification = body => http.post(apiCreateNotification, body)
 const seenNotification = () => http.get(apiSeenNotification, {
   headers: {
-    'token': `Bearer ${localStorage.getItem('token')}`
+    'token': `Bearer ${getLocalStorage('token')}`
   }
 })
 const getListNotificationByReceiver = () => http.get(apiGetListNotificationByReceiver, {
   headers: {
-    'token': `Bearer ${localStorage.getItem('token')}`
+    'token': `Bearer ${getLocalStorage('token')}`
   }
 })
 

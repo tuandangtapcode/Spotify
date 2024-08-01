@@ -117,6 +117,42 @@ const deletePlaylist = async (req, res) => {
   }
 }
 
+const updatePlaylist = async (req, res) => {
+  try {
+    const data = await UserService.fncUpdatePlaylist(req)
+    return res.status(data.statusCode).json(data)
+  } catch (error) {
+    return res.status(500).json(error.toString())
+  }
+}
+
+const addOrDeleteLoveSong = async (req, res) => {
+  try {
+    const data = await UserService.fncAddOrDeleteLoveSong(req)
+    return res.status(data.statusCode).json(data)
+  } catch (error) {
+    return res.status(500).json(error.toString())
+  }
+}
+
+const addOrDeleteAlbum = async (req, res) => {
+  try {
+    const data = await UserService.fncAddOrDeleteAlbum(req)
+    return res.status(data.statusCode).json(data)
+  } catch (error) {
+    return res.status(500).json(error.toString())
+  }
+}
+
+const getListArtist = async (req, res) => {
+  try {
+    const data = await UserService.fncGetListArtist(req)
+    return res.status(data.statusCode).json(data)
+  } catch (error) {
+    return res.status(500).json(error.toString())
+  }
+}
+
 
 const UserController = {
   login,
@@ -129,9 +165,13 @@ const UserController = {
   createPlaylist,
   getDetailPlaylist,
   deletePlaylist,
+  updatePlaylist,
   createAccoutArtist,
   getListUser,
-  deactiveAccount
+  deactiveAccount,
+  addOrDeleteLoveSong,
+  addOrDeleteAlbum,
+  getListArtist
 }
 
 export default UserController

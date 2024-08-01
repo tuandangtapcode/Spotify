@@ -10,6 +10,7 @@ import globalSlice from 'src/redux/globalSlice'
 import LibraryItem from './components/LibraryItem'
 import UserService from 'src/services/UserService'
 import ListIcons from '../ListIcons'
+import ModalInsertUpdateAlbum from 'src/pages/ANONYMOUS/AlbumDetail/components/ModalInsertUpdateAlbum'
 
 const Sidebar = () => {
 
@@ -27,9 +28,10 @@ const Sidebar = () => {
       setLoading(true)
       const res = await UserService.createPlaylist()
       if (res?.isError) return toast.error(res?.msg)
-      dispatch(globalSlice.actions.setUser({ ...global?.user, Playlists: [...global?.user?.playlists, res?.data] }))
+      dispatch(globalSlice.actions.setUser(res?.data))
       setOpenPoperCreatePlaylist(false)
-      navigate(`/playlist/${res?.data?._id}`)
+      const newPlaylist = res?.data?.Playlists[res?.data?.Playlists.length - 1]
+      navigate(`/playlist/${newPlaylist?._id}`)
     } finally {
       setLoading(false)
     }
@@ -56,38 +58,47 @@ const Sidebar = () => {
 
   const itemDropdownCreatePlaylist = [
     {
+      isEnabled: !global?.user?._id,
       key: "1",
       label: (
-        !global?.user?._id ?
-          <div className='align-items-center'
-            onClick={() => {
-              setOpenPoperCreatePlaylist(false)
-              setOpenPoperLogin(true)
-            }}
-          >
-            {ListIcons.ICON_MUSIC_NOTE}
-            Tạo danh sách phát mới
-          </div>
-          :
-          <>
-            <div
-              className='align-items-center'
-              onClick={() => handleCreatePlaylist()}
-            >
-              {ListIcons.ICON_MUSIC_NOTE}
-              Tạo danh sách phát mới
-            </div>
-            <div
-              className='align-items-center'
-              onClick={() => {
-                setOpenModalCreateAlbum(true)
-                setOpenPoperCreatePlaylist(false)
-              }}
-            >
-              {ListIcons.ICON_FOLDER}
-              Tạo album nhạc
-            </div>
-          </>
+        <div className='align-items-center'
+          onClick={() => {
+            setOpenPoperCreatePlaylist(false)
+            setOpenPoperLogin(true)
+          }}
+        >
+          {ListIcons.ICON_MUSIC_NOTE}
+          Tạo danh sách phát mới
+        </div>
+      )
+    },
+    {
+      isEnabled: !!global?.user?._id,
+      key: "2",
+      label: (
+        <div
+          className='align-items-center'
+          onClick={() => handleCreatePlaylist()}
+        >
+          {ListIcons.ICON_MUSIC_NOTE}
+          Tạo danh sách phát mới
+        </div>
+      )
+    },
+    {
+      isEnabled: !!global?.user?._id && global?.user?.RoleID === 2,
+      key: "3",
+      label: (
+        <div
+          className='align-items-center'
+          onClick={() => {
+            setOpenModalCreateAlbum(true)
+            setOpenPoperCreatePlaylist(false)
+          }}
+        >
+          {ListIcons.ICON_FOLDER}
+          Tạo album nhạc
+        </div>
       )
     }
   ]
@@ -140,7 +151,7 @@ const Sidebar = () => {
                     trigger={["click"]}
                     placement="bottomLeft"
                     menu={{
-                      items: itemDropdownCreatePlaylist
+                      items: itemDropdownCreatePlaylist?.filter(i => !!i?.isEnabled)
                     }}
                   >
                     <Tooltip arrow={false} open={openTooltip} color='rgb(46, 43, 43)' title={`Tạo danh sách phát hoặc thư mục`}>
@@ -218,7 +229,7 @@ const Sidebar = () => {
                     trigger={["click"]}
                     placement="bottomLeft"
                     menu={{
-                      items: itemDropdownCreatePlaylist
+                      items: itemDropdownCreatePlaylist?.filter(i => !!i?.isEnabled)
                     }}
                   >
                     <Tooltip arrow={false} open={openTooltip} color='rgb(46, 43, 43)' title={`Tạo danh sách phát hoặc thư mục`}>
@@ -244,19 +255,18 @@ const Sidebar = () => {
               <div className='sidebar-bottom-content'>
                 <div>
                   {
-                    (!!global?.user?.LoveSongs?.length ||
-                      !!global?.user?.Playlists?.length ||
+                    (!!global?.user?.Playlists?.length ||
                       !!global?.user?.Albums?.length
                     ) ?
                       (
                         [
-                          ...global?.user?.LoveSongs,
                           ...global?.user?.Playlists,
                           ...global?.user?.Albums
                         ].sort((a, b) => {
-                          return new Date(b?.addedAt) - new Date(a?.addedAt)
-                        }).map(i =>
+                          return new Date(b?.AddedAt) - new Date(a?.AddedAt)
+                        }).map((i, idx) =>
                           <LibraryItem
+                            key={idx}
                             libraryItem={i}
                           />
                         )
@@ -287,6 +297,13 @@ const Sidebar = () => {
           </ContentSidebarStyled>
       }
 
+      {
+        !!openModalCreateAlbum &&
+        <ModalInsertUpdateAlbum
+          open={openModalCreateAlbum}
+          onCancel={() => setOpenModalCreateAlbum(false)}
+        />
+      }
     </SidebarStyled >
   )
 }
